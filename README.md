@@ -27,11 +27,7 @@ Créer un **tiroir motorisé silencieux**, installé **sous ton bureau**, pour r
 
 ---
 
-## 📦 Liste de course — TES LIENS (non modifiés)
-
-> ✅ Aucun lien n’a été changé — c’est bien ceux que tu as sélectionnés.
-
----
+## 📦 Liste de course 
 
 ### 1. 🖥️ ESP32 DevKit USB-C  
 🔗 https://fr.aliexpress.com/item/1005006212080137.html
@@ -80,8 +76,6 @@ Créer un **tiroir motorisé silencieux**, installé **sous ton bureau**, pour r
 
 ## 🧰 Items Bonus Recommandés — Références à chercher
 
-> Pas de lien — cherche simplement ces références exactes.
-
 - 🔌 **“Lot 120 câbles Dupont mâle femelle”**
 - 📦 **“Boîtier étanche IP65 100x70x50mm”**
 - 🚨 **“Bouton arrêt d’urgence 22mm NO NC”**
@@ -91,16 +85,10 @@ Créer un **tiroir motorisé silencieux**, installé **sous ton bureau**, pour r
 
 ## 💡 Prochaines étapes (après réception)
 
-Dis-moi ce que tu veux en premier :
 
 ➡️ **Schéma de câblage détaillé (GPIO, power, capteurs)**  
 ➡️ **Code ESPHome complet avec config TMC2209 StealthChop + sécurité**  
 ➡️ **Guide de montage mécanique (fixation rails, tendeur courroie, calibrage)**
 
-Je te le prépare immédiatement — propre, commenté, prêt à flasher.
 
 ---
-
-✅ **Ton projet est cohérent, bien pensé, et tes composants sont adaptés.**
-
-Bonne commande — et à très vite pour la suite ! 🛠️💻🔇
