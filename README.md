@@ -117,3 +117,4 @@ Créer un **tiroir motorisé**, installé **sous ton bureau**, pour ranger ou d�
 ✅ Automatisations : géolocalisation, heure, capteur de présence...
 
 ---
+
