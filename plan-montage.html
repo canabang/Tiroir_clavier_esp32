@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de montage - Tiroir motorisé</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        
+        .view-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+        
+        .view-btn {
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+        
+        .view-btn.active {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .drawing-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+        
+        .dimension-line {
+            stroke: #e74c3c;
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        .dimension-arrow {
+            fill: #e74c3c;
+        }
+        
+        .dimension-text {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            fill: #e74c3c;
+        }
+        
+        .component-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            text-anchor: middle;
+            fill: #2c3e50;
+        }
+        
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .legend-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s ease;
+        }
+        
+        .legend-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .legend-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        .notes {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .notes h3 {
+            color: #d68910;
+            margin-top: 0;
+        }
+        
+        .notes ul {
+            margin: 10px 0;
+        }
+        
+        .notes li {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+        
+        .hide { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Plan de Montage - Tiroir Motorisé</h1>
+        <p class="subtitle">ESP32 + TMC2209 + Courroie GT2 | Bureau 850×500mm</p>
+        
+        <div class="view-selector">
+            <button class="view-btn active" onclick="showView('top')">Vue de Dessus</button>
+            <button class="view-btn" onclick="showView('side')">Vue de Côté</button>
+            <button class="view-btn" onclick="showView('belt')">Système Courroie</button>
+        </div>
+        
+        <!-- Vue de dessus -->
+        <div id="view-top" class="drawing-container">
+            <svg viewBox="0 0 1000 700">
+                <!-- Bureau (orientation correcte) -->
+                <rect x="75" y="150" width="850" height="500" fill="#d4af37" stroke="#8b7355" stroke-width="3" rx="5"/>
+                <text x="500" y="140" class="component-label">BUREAU 850×500×20mm</text>
+                <text x="500" y="125" class="component-label" font-size="10" fill="#7f8c8d">← Tu es assis face à cette largeur</text>
+                
+                <!-- Position fermée du tiroir (centré) -->
+                <rect x="200" y="200" width="600" height="400" fill="#87ceeb" stroke="#4682b4" stroke-width="2" rx="3"/>
+                <text x="500" y="190" class="component-label">TIROIR 600×400×20mm (fermé)</text>
+                
+                <!-- Position ouverte du tiroir (pointillés) -->
+                <rect x="200" y="400" width="600" height="400" fill="none" stroke="#4682b4" stroke-width="2" stroke-dasharray="10,5" rx="3"/>
+                <text x="500" y="610" class="component-label" fill="#4682b4">Position ouverte</text>
+                
+                <!-- Rails télescopiques (dans le sens de la profondeur) -->
+                <rect x="210" y="200" width="7" height="400" fill="#696969" stroke="#2f4f4f" stroke-width="1"/>
+                <rect x="783" y="200" width="7" height="400" fill="#696969" stroke="#2f4f4f" stroke-width="1"/>
+                <text x="190" y="380" class="component-label" transform="rotate(-90, 190, 380)">Rail 400mm</text>
+                <text x="810" y="380" class="component-label" transform="rotate(-90, 810, 380)">Rail 400mm</text>
+                
+                <!-- Moteur NEMA17 (au fond du bureau) -->
+                <rect x="479" y="160" width="42" height="42" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
+                <circle cx="500" cy="181" r="3" fill="#e74c3c"/>
+                <text x="500" y="155" class="component-label">NEMA17</text>
+                
+                <!-- Poulie moteur -->
+                <circle cx="500" cy="202" r="10" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+                <text x="525" y="207" class="component-label">Poulie 20T</text>
+                
+                <!-- Poulie renvoi (côté avant) -->
+                <circle cx="500" cy="580" r="10" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+                <text x="525" y="585" class="component-label">Poulie 20T</text>
+                
+                <!-- Courroie GT2 (dans le sens profondeur) -->
+                <path d="M 500,212 L 500,570 Q 500,590 520,590 L 783,590 Q 803,590 803,570 L 803,220 Q 803,200 783,200 L 520,200 Q 500,200 500,220 L 500,212" 
+                      fill="none" stroke="#27ae60" stroke-width="4" stroke-dasharray="5,5"/>
+                <text x="820" y="400" class="component-label" transform="rotate(-90, 820, 400)">COURROIE GT2 (2m)</text>
+                
+                <!-- Point d'attache tiroir -->
+                <circle cx="500" cy="400" r="5" fill="#e74c3c"/>
+                <text x="510" y="405" class="component-label">Attache tiroir</text>
+                
+                <!-- Capteurs TCRT5000 -->
+                <rect x="220" y="210" width="5" height="8" fill="#9b59b6"/>
+                <rect x="220" y="582" width="5" height="8" fill="#9b59b6"/>
+                <text x="235" y="218" class="component-label">TCRT5000</text>
+                <text x="235" y="590" class="component-label">TCRT5000</text>
+                
+                <!-- Flèche direction ouverture -->
+                <path d="M 500,350 L 500,420" stroke="#e74c3c" stroke-width="4" marker-end="url(#arrowhead)"/>
+                <text x="510" y="385" class="component-label" fill="#e74c3c">OUVERTURE</text>
+                <text x="510" y="397" class="component-label" fill="#e74c3c">vers toi</text>
+                
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+                    </marker>
+                </defs>
+                
+                <!-- Dimensions principales -->
+                <!-- Largeur bureau -->
+                <line x1="75" y1="680" x2="925" y2="680" class="dimension-line"/>
+                <polygon points="75,675 85,680 75,685" class="dimension-arrow"/>
+                <polygon points="925,675 915,680 925,685" class="dimension-arrow"/>
+                <text x="500" y="700" class="dimension-text">850mm (largeur face à toi)</text>
+                
+                <!-- Profondeur bureau -->
+                <line x1="50" y1="150" x2="50" y2="650" class="dimension-line"/>
+                <polygon points="45,150 50,160 55,150" class="dimension-arrow"/>
+                <polygon points="45,650 50,640 55,650" class="dimension-arrow"/>
+                <text x="30" y="400" class="dimension-text" transform="rotate(-90, 30, 400)">500mm profondeur</text>
+                
+                <!-- Course tiroir -->
+                <line x1="950" y1="200" x2="950" y2="600" class="dimension-line"/>
+                <polygon points="945,200 950,210 955,200" class="dimension-arrow"/>
+                <polygon points="945,600 950,590 955,600" class="dimension-arrow"/>
+                <text x="965" y="400" class="dimension-text" transform="rotate(-90, 965, 400)">400mm course</text>
+                
+                <!-- Centrage tiroir -->
+                <line x1="75" y1="120" x2="200" y2="120" class="dimension-line"/>
+                <polygon points="75,115 85,120 75,125" class="dimension-arrow"/>
+                <polygon points="200,115 190,120 200,125" class="dimension-arrow"/>
+                <text x="137" y="110" class="dimension-text">125mm</text>
+                
+                <line x1="800" y1="120" x2="925" y2="120" class="dimension-line"/>
+                <polygon points="800,115 810,120 800,125" class="dimension-arrow"/>
+                <polygon points="925,115 915,120 925,125" class="dimension-arrow"/>
+                <text x="862" y="110" class="dimension-text">125mm</text>
+            </svg>
+        </div>
+        
+        <!-- Vue de côté -->
+        <div id="view-side" class="drawing-container hide">
+            <svg viewBox="0 0 1000 500">
+                <!-- Bureau (profil) -->
+                <rect x="100" y="50" width="800" height="20" fill="#d4af37" stroke="#8b7355" stroke-width="3"/>
+                <text x="500" y="40" class="component-label">BUREAU (vue de côté)</text>
+                
+                <!-- Pieds bureau -->
+                <rect x="120" y="70" width="20" height="300" fill="#8b4513" stroke="#654321" stroke-width="2"/>
+                <rect x="860" y="70" width="20" height="300" fill="#8b4513" stroke="#654321" stroke-width="2"/>
+                
+                <!-- Rails télescopiques (profil) -->
+                <rect x="200" y="90" width="600" height="35.9" fill="#696969" stroke="#2f4f4f" stroke-width="2"/>
+                <text x="150" y="108" class="component-label">Rails 35.9×2×7</text>
+                
+                <!-- Tiroir -->
+                <rect x="200" y="125.9" width="600" height="20" fill="#87ceeb" stroke="#4682b4" stroke-width="2"/>
+                <text x="500" y="175" class="component-label">TIROIR 600×400×20mm</text>
+                
+                <!-- Support moteur -->
+                <rect x="50" y="80" width="80" height="15" fill="#34495e" stroke="#2c3e50" stroke-width="2"/>
+                <text x="90" y="76" class="component-label">Support moteur</text>
+                
+                <!-- Moteur NEMA17 (profil) -->
+                <rect x="70" y="95" width="42" height="42" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
+                <text x="91" y="92" class="component-label">NEMA17</text>
+                
+                <!-- Boîtier électronique -->
+                <rect x="750" y="200" width="100" height="60" fill="#2c3e50" stroke="#34495e" stroke-width="2" rx="5"/>
+                <text x="800" y="195" class="component-label">ESP32 + TMC2209</text>
+                <text x="800" y="240" class="component-label" fill="#95a5a6">Boîtier étanche</text>
+                
+                <!-- Alimentation -->
+                <rect x="600" y="200" width="80" height="40" fill="#e74c3c" stroke="#c0392b" stroke-width="2" rx="3"/>
+                <text x="640" y="195" class="component-label">Alim 24V</text>
+                
+                <!-- Dimensions hauteurs -->
+                <line x1="50" y1="50" x2="50" y2="125.9" class="dimension-line"/>
+                <polygon points="45,50 50,60 55,50" class="dimension-arrow"/>
+                <polygon points="45,125.9 50,115.9 55,125.9" class="dimension-arrow"/>
+                <text x="20" y="88" class="dimension-text">75.9mm</text>
+                
+                <!-- Hauteur libre -->
+                <line x1="950" y1="70" x2="950" y2="200" class="dimension-line"/>
+                <polygon points="945,70 950,80 955,70" class="dimension-arrow"/>
+                <polygon points="945,200 950,190 955,200" class="dimension-arrow"/>
+                <text x="960" y="135" class="dimension-text">130mm libre</text>
+            </svg>
+        </div>
+        
+        <!-- Système courroie -->
+        <div id="view-belt" class="drawing-container hide">
+            <svg viewBox="0 0 1000 600">
+                <!-- Support de base (dans le sens profondeur) -->
+                <rect x="200" y="80" width="15" height="500" fill="#34495e" stroke="#2c3e50" stroke-width="2"/>
+                <text x="100" y="330" class="component-label" transform="rotate(-90, 100, 330)">PLAQUE SUPPORT (à découper)</text>
+                
+                <!-- Moteur (côté fond du bureau) -->
+                <rect x="172" y="100" width="42" height="42" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
+                <text x="193" y="95" class="component-label">NEMA17</text>
+                
+                <!-- Poulie moteur -->
+                <circle cx="193" cy="142" r="10" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+                <text x="168" y="130" class="component-label">20T-5mm</text>
+                
+                <!-- Poulie renvoi fixe (côté avant du bureau) -->
+                <circle cx="193" cy="500" r="10" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+                <text x="168" y="525" class="component-label">20T-5mm</text>
+                
+                <!-- Poulie tendeur -->
+                <circle cx="300" cy="500" r="10" fill="#27ae60" stroke="#229954" stroke-width="2"/>
+                <text x="310" y="505" class="component-label">Galet tendeur</text>
+                
+                <!-- Support tendeur réglable -->
+                <rect x="270" y="490" width="60" height="20" fill="#7f8c8d" stroke="#34495e" stroke-width="2"/>
+                <line x1="250" y1="495" x2="270" y2="495" class="dimension-line"/>
+                <line x1="250" y1="490" x2="250" y2="500" class="dimension-line"/>
+                <text x="320" y="485" class="component-label">Réglage tension</text>
+                
+                <!-- Courroie (dans le sens profondeur) -->
+                <path d="M 193,152 L 193,490 Q 193,510 213,510 L 290,510 Q 310,510 310,490 L 310,162 Q 310,142 290,142 L 213,142 Q 193,142 193,162 L 193,152" 
+                      fill="none" stroke="#27ae60" stroke-width="6" stroke-dasharray="8,4"/>
+                <text x="350" y="330" class="component-label" transform="rotate(-90, 350, 330)">COURROIE GT2 - 2 mètres</text>
+                
+                <!-- Point d'attache au tiroir -->
+                <circle cx="193" cy="300" r="5" fill="#e74c3c"/>
+                <line x1="193" y1="300" x2="130" y2="300" stroke="#e74c3c" stroke-width="3"/>
+                <text x="50" y="305" class="component-label">Attache tiroir</text>
+                
+                <!-- Flèche sens rotation -->
+                <path d="M 173,152 Q 163,162 173,172" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowhead)"/>
+                <text x="120" y="165" class="component-label" fill="#e74c3c">Sens antihoraire = OUVRIR</text>
+                
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+                    </marker>
+                </defs>
+                
+                <!-- Dimensions critiques -->
+                <line x1="140" y1="142" x2="140" y2="490" class="dimension-line"/>
+                <polygon points="135,142 140,152 145,142" class="dimension-arrow"/>
+                <polygon points="135,490 140,480 145,490" class="dimension-arrow"/>
+                <text x="120" y="316" class="dimension-text" transform="rotate(-90, 120, 316)">348mm (entraxe poulies)</text>
+                
+                <!-- Course utile -->
+                <line x1="400" y1="200" x2="400" y2="400" class="dimension-line"/>
+                <polygon points="395,200 400,210 405,200" class="dimension-arrow"/>
+                <polygon points="395,400 400,390 405,400" class="dimension-arrow"/>
+                <text x="420" y="300" class="dimension-text" transform="rotate(-90, 420, 300)">200mm course utile</text>
+                
+                <!-- Instructions montage -->
+                <rect x="500" y="50" width="450" height="140" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="2" rx="5"/>
+                <text x="520" y="75" class="component-label" text-anchor="start">SÉQUENCE MONTAGE COURROIE (sens profondeur) :</text>
+                <text x="520" y="95" class="component-label" text-anchor="start" font-size="10">1. Fixer moteur au fond + poulie renvoi à l'avant (entraxe 348mm)</text>
+                <text x="520" y="110" class="component-label" text-anchor="start" font-size="10">2. Passer courroie sur les 2 poulies principales</text>
+                <text x="520" y="125" class="component-label" text-anchor="start" font-size="10">3. Attacher courroie au tiroir (point milieu = 200mm du fond)</text>
+                <text x="520" y="140" class="component-label" text-anchor="start" font-size="10">4. Ajuster tension avec galet tendeur latéral</text>
+                <text x="520" y="155" class="component-label" text-anchor="start" font-size="10">5. Test : 1 tour = 62.8mm → 400mm course = 6.4 tours</text>
+                <text x="520" y="170" class="component-label" text-anchor="start" font-size="10">→ Direction : Antihoraire = OUVERTURE vers toi</text>
+            </svg>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-title">🎨 Code Couleur</div>
+                <div><span class="legend-color" style="background: #d4af37;"></span>Bureau (850×500×20mm)</div>
+                <div><span class="legend-color" style="background: #87ceeb;"></span>Tiroir (600×400×20mm)</div>
+                <div><span class="legend-color" style="background: #696969;"></span>Rails télescopiques</div>
+                <div><span class="legend-color" style="background: #2c3e50;"></span>Moteur NEMA17</div>
+                <div><span class="legend-color" style="background: #f39c12;"></span>Poulies 20T</div>
+                <div><span class="legend-color" style="background: #27ae60;"></span>Courroie GT2</div>
+                <div><span class="legend-color" style="background: #9b59b6;"></span>Capteurs TCRT5000</div>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-title">📐 Dimensions Clés</div>
+                <div>• Bureau : 850×500×20mm</div>
+                <div>• Tiroir : 600×400×20mm (centré)</div>
+                <div>• Rails : 400mm course utile</div>
+                <div>• Entraxe poulies : 723mm</div>
+                <div>• Hauteur sous bureau : 130mm libre</div>
+                <div>• Courroie GT2 : 2 mètres</div>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-title">⚙️ Calculs Moteur</div>
+                <div>• Poulie 20T = 62.8mm/tour</div>
+                <div>• Course 400mm = 6.4 tours</div>
+                <div>• Résolution : 0.31mm/pas (200 pas/tour)</div>
+                <div>• Microsteps 1/16 : 0.02mm/pas</div>
+                <div>• Vitesse max : ~50mm/s recommandé</div>
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-title">🔧 Points de Fixation</div>
+                <div>• Moteur : vissé sous bureau (côté gauche)</div>
+                <div>• Poulie renvoi : support à fabriquer</div>
+                <div>• Rails : vissés sous bureau (écart 373mm)</div>
+                <div>• Capteurs : sur rails ou règle séparée</div>
+                <div>• Boîtier ESP32 : étanche sous bureau</div>
+            </div>
+        </div>
+        
+        <div class="notes">
+            <h3>📋 Notes Importantes</h3>
+            <ul>
+                <li><strong>Tension courroie :</strong> Le galet tendeur permet d'ajuster la tension sans démonter. Serrer modérément pour éviter les pas perdus.</li>
+                <li><strong>Fixations moteur :</strong> Utiliser des silentblocs en caoutchouc pour réduire les vibrations transmises au bureau.</li>
+                <li><strong>Course sécurisée :</strong> Les capteurs TCRT5000 détectent les fins de course à 10-20mm des extrémités pour éviter les chocs.</li>
+                <li><strong>Sens de rotation :</strong> Horaire = ouverture, antihoraire = fermeture (à vérifier selon le câblage moteur).</li>
+                <li><strong>Plaque support :</strong> Découper une plaque alu/contreplaqué pour maintenir l'entraxe des poulies parfaitement.</li>
+                <li><strong>Câblage :</strong> Prévoir goulotte ou passe-câbles pour alimenter le moteur qui se déplace avec le tiroir.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        function showView(viewName) {
+            // Cacher toutes les vues
+            document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hide'));
+            // Désactiver tous les boutons
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Afficher la vue sélectionnée
+            document.getElementById('view-' + viewName).classList.remove('hide');
+            // Activer le bouton correspondant
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
