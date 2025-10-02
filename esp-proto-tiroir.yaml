@@ -1,0 +1,199 @@
+substitutions:
+  name: "esp-proto-tiroir"
+  idname: "esp_proto_tiroir" # "_" est le seul caractère autoriser
+  board: esp32dev
+  type: esp-idf # ou arduino
+  loglevel: DEBUG #VERY_VERBOSE
+  static_ip: 192.168.1.19
+
+packages:
+  base: !include .base.yaml
+
+
+
+
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "t3+J8h3xlApxqLynB8ng7HShgeuC6T8cv2GGSN1ajAY="
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  id: bus_a
+
+sensor:
+  - platform: ina219
+    address: 0x40
+    shunt_resistance: 0.1 ohm
+    current:
+      name: "Courant Moteur Tiroir"
+      id: motor_current
+      filters:
+        - sliding_window_moving_average:
+            window_size: 5
+            send_every: 1
+    power:
+      name: "Puissance Moteur Tiroir"
+    bus_voltage:
+      name: "Tension Bus 24V"
+    shunt_voltage:
+      name: "Tension Shunt"
+    max_voltage: 32V
+    max_current: 3.2A
+    update_interval: 100ms
+
+# Configuration du moteur pas-à-pas (TMC2209)
+stepper:
+  - platform: a4988
+    id: drawer_stepper
+    step_pin: GPIO14
+    dir_pin: GPIO12
+    max_speed: 800 steps/s  # Vitesse max (à ajuster selon tests)
+    acceleration: 400 steps/s^2  # Accélération douce
+    deceleration: 400 steps/s^2  # Décélération douce
+
+# Enable pin du TMC2209 (LOW = activé)
+output:
+  - platform: gpio
+    pin: GPIO13
+    id: stepper_enable
+    inverted: true  # LOW active le moteur
+
+# Interrupteur pour activer/désactiver le moteur
+switch:
+  - platform: output
+    name: "Enable Moteur Tiroir"
+    id: motor_enable_switch
+    output: stepper_enable
+    restore_mode: RESTORE_DEFAULT_OFF
+    icon: "mdi:power"
+
+# Cover entity pour Home Assistant
+cover:
+  - platform: template
+    name: "Tiroir Motorisé"
+    id: drawer_cover
+    device_class: curtain
+    
+    # Position actuelle (0% = fermé, 100% = ouvert)
+    lambda: |-
+      return id(drawer_position);
+    
+    # Action OUVRIR
+    open_action:
+      - logger.log: "Ouverture du tiroir..."
+      - switch.turn_on: motor_enable_switch
+      - delay: 100ms
+      - while:
+          condition:
+            lambda: 'return id(drawer_position) < 1.0;'
+          then:
+            - stepper.set_target:
+                id: drawer_stepper
+                target: !lambda 'return id(drawer_stepper).current_position + 100;'
+            - delay: 50ms
+            - lambda: |-
+                id(drawer_position) += 0.01;
+                if (id(drawer_position) > 1.0) id(drawer_position) = 1.0;
+      - logger.log: "Tiroir ouvert"
+      - delay: 500ms
+      - switch.turn_off: motor_enable_switch
+    
+    # Action FERMER
+    close_action:
+      - logger.log: "Fermeture du tiroir..."
+      - switch.turn_on: motor_enable_switch
+      - delay: 100ms
+      - while:
+          condition:
+            lambda: 'return id(drawer_position) > 0.0;'
+          then:
+            - stepper.set_target:
+                id: drawer_stepper
+                target: !lambda 'return id(drawer_stepper).current_position - 100;'
+            - delay: 50ms
+            - lambda: |-
+                id(drawer_position) -= 0.01;
+                if (id(drawer_position) < 0.0) id(drawer_position) = 0.0;
+      - logger.log: "Tiroir fermé"
+      - delay: 500ms
+      - switch.turn_off: motor_enable_switch
+    
+    # Action STOP
+    stop_action:
+      - logger.log: "Arrêt du tiroir"
+      - stepper.set_target:
+          id: drawer_stepper
+          target: !lambda 'return id(drawer_stepper).current_position;'
+      - delay: 500ms
+      - switch.turn_off: motor_enable_switch
+    
+    # Position à atteindre (%)
+    position_action:
+      - logger.log:
+          format: "Déplacement vers %.0f%%"
+          args: [ 'pos * 100' ]
+      - switch.turn_on: motor_enable_switch
+      - delay: 100ms
+      - lambda: |-
+          float target_pos = pos;
+          int steps_per_100percent = 10000;  // À CALIBRER selon ta course réelle
+          int target_steps = (int)(target_pos * steps_per_100percent);
+          id(drawer_stepper).set_target(target_steps);
+          id(drawer_position) = target_pos;
+      - delay: 500ms
+      - switch.turn_off: motor_enable_switch
+    
+    optimistic: true
+
+# Variable globale pour stocker la position
+globals:
+  - id: drawer_position
+    type: float
+    restore_value: true
+    initial_value: '0.0'
+
+# Protection surintensité (stop si > 1.5A)
+interval:
+  - interval: 200ms
+    then:
+      - lambda: |-
+          if (id(motor_current).state > 1.5) {
+            ESP_LOGW("safety", "Surintensité détectée: %.2fA - Arrêt d'urgence!", id(motor_current).state);
+            id(drawer_cover).stop();
+          }
+
+# Boutons de test dans l'interface
+button:
+  - platform: template
+    name: "Test Rotation Horaire"
+    on_press:
+      - switch.turn_on: motor_enable_switch
+      - delay: 100ms
+      - stepper.set_target:
+          id: drawer_stepper
+          target: 1600  # 1 tour complet (200 pas * 8 microsteps)
+      - delay: 3s
+      - switch.turn_off: motor_enable_switch
+  
+  - platform: template
+    name: "Test Rotation Anti-Horaire"
+    on_press:
+      - switch.turn_on: motor_enable_switch
+      - delay: 100ms
+      - stepper.set_target:
+          id: drawer_stepper
+          target: -1600
+      - delay: 3s
+      - switch.turn_off: motor_enable_switch
+  
+  - platform: template
+    name: "Reset Position"
+    on_press:
+      - lambda: |-
+          id(drawer_stepper).report_position(0);
+          id(drawer_position) = 0.0;
+      - logger.log: "Position réinitialisée"
