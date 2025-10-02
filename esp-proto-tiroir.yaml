@@ -4,7 +4,7 @@ substitutions:
   board: esp32dev
   type: esp-idf # ou arduino
   loglevel: DEBUG #VERY_VERBOSE
-  static_ip: 192.168.1.19
+  static_ip: 192.168.xxx.xxx
 
 packages:
   base: !include .base.yaml
@@ -16,14 +16,16 @@ packages:
 # Enable Home Assistant API
 api:
   encryption:
-    key: "t3+J8h3xlApxqLynB8ng7HShgeuC6T8cv2GGSN1ajAY="
+    key: "xxxxxxxxxx"
 
+# Configuration I2C pour INA219
 i2c:
   sda: GPIO21
   scl: GPIO22
   scan: true
   id: bus_a
 
+# Capteur INA219 (déjà configuré)
 sensor:
   - platform: ina219
     address: 0x40
