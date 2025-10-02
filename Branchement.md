@@ -70,6 +70,9 @@ Alim 24V 3A
 
 > ⚙️ **RÉGLAGE OBLIGATOIRE** : Ajuster le potentiomètre à **5.0V** (±0.1V) avec un multimètre AVANT de brancher l'ESP32 !
 
+![LM2596adj](https://github.com/user-attachments/assets/62fbf289-41cd-47d2-b403-eeafa99d477d)
+
+
 ---
 
 ### **3️⃣ ESP32 DevKit 38 pins**
