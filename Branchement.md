@@ -32,7 +32,7 @@ Alim 24V 3A
 
 ---
 
-<img width="3000" height="2155" alt="schema_tiroir" src="https://github.com/user-attachments/assets/5daec22f-1d3a-4d96-bb84-7258071b8e04" />
+<img width="3000" height="2112" alt="schema_tiroir" src="https://github.com/user-attachments/assets/72e03dfe-ac96-40ad-a31f-79be13695e68" />
 
 
 ## 🔌 Schéma de câblage principal
