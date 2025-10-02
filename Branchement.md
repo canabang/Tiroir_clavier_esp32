@@ -32,6 +32,8 @@ Alim 24V 3A
 
 ---
 
+images/schema_tiroir.png
+
 ## 🔌 Schéma de câblage principal
 
 ### **1️⃣ Alimentation 24V → Distribution**
