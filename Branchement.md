@@ -32,8 +32,7 @@ Alim 24V 3A
 
 ---
 
-[images/schema_tiroir.png
-](https://github.com/canabang/Tiroir_clavier_esp32/blob/main/images/schema_tiroir.png)
+<img width="3000" height="2155" alt="schema_tiroir" src="https://github.com/user-attachments/assets/5daec22f-1d3a-4d96-bb84-7258071b8e04" />
 
 
 ## 🔌 Schéma de câblage principal
