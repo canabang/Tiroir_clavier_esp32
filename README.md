@@ -64,8 +64,8 @@ Créer un **tiroir motorisé**, installé **sous ton bureau**, pour ranger ou d�
 
 ---
 
-### 6. 📏 Capteurs optiques TCRT5000 (lot de 5)  
-🔗 https://fr.aliexpress.com/item/1005009053525333.html
+### 6. 📏 Capteurs optiques TCRT5000 (lot de 3)  
+🔗 [https://fr.aliexpress.com/item/1005009053525333.html](https://fr.aliexpress.com/item/1899471977.html?spm=a2g0o.productlist.main.2.1aa85661Ykr0FG&algo_pvid=948599df-af74-4ec0-aa38-adcb71167fdf&algo_exp_id=948599df-af74-4ec0-aa38-adcb71167fdf-1&pdp_ext_f=%7B%22order%22%3A%2213%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%210.98%210.98%21%21%211.12%211.12%21%40211b618e17595942657715386e8e14%2110000001889845186%21sea%21FR%212141924783%21X%211%210%21n_tag%3A-29919%3Bd%3A9cfbee09%3Bm03_new_user%3A-29895&curPageLogUid=XF6W5ecUdzKE&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1899471977%7C_p_origin_prod%3A)
 
 ---
 
