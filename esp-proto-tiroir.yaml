@@ -47,6 +47,85 @@ sensor:
     max_current: 3.2A
     update_interval: 100ms
 
+# ========================================
+# BOUTONS PHYSIQUES (avec feedback LED)
+# ========================================
+binary_sensor:
+  # Bouton VERT (Ouvrir)
+  - platform: gpio
+    pin:
+      number: GPIO26
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Bouton Ouvrir"
+    id: btn_open
+    on_press:
+      then:
+        # Feedback LED (si activé)
+        - if:
+            condition:
+              switch.is_on: led_feedback_enabled
+            then:
+              - output.turn_on: led_verte_output
+              - delay: 1s
+              - if:
+                  condition:
+                    switch.is_off: led_verte_switch
+                  then:
+                    - output.turn_off: led_verte_output
+        # Action cover
+        - cover.open: tiroir_clavier
+  
+  # Bouton BLEU (Fermer)
+  - platform: gpio
+    pin:
+      number: GPIO32
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Bouton Fermer"
+    id: btn_close
+    on_press:
+      then:
+        # Feedback LED (si activé)
+        - if:
+            condition:
+              switch.is_on: led_feedback_enabled
+            then:
+              - output.turn_on: led_bleue_output
+              - delay: 1s
+              - if:
+                  condition:
+                    switch.is_off: led_bleue_switch
+                  then:
+                    - output.turn_off: led_bleue_output
+        # Action cover
+        - cover.close: tiroir_clavier
+  
+  # Bouton ROUGE (Stop)
+  - platform: gpio
+    pin:
+      number: GPIO35
+      mode: INPUT
+      inverted: true
+    name: "Bouton Stop"
+    id: btn_stop
+    on_press:
+      then:
+        # Feedback LED (si activé)
+        - if:
+            condition:
+              switch.is_on: led_feedback_enabled
+            then:
+              - output.turn_on: led_rouge_output
+              - delay: 1s
+              - if:
+                  condition:
+                    switch.is_off: led_rouge_switch
+                  then:
+                    - output.turn_off: led_rouge_output
+        # Action cover
+        - cover.stop: tiroir_clavier
+
 # Configuration du moteur pas-à-pas (TMC2209)
 stepper:
   - platform: a4988
@@ -57,21 +136,70 @@ stepper:
     acceleration: 400 steps/s^2  # Accélération douce
     deceleration: 400 steps/s^2  # Décélération douce
 
-# Enable pin du TMC2209 (LOW = activé)
 output:
+# Enable pin du TMC2209 (LOW = activé)
   - platform: gpio
     pin: GPIO13
     id: stepper_enable
     inverted: true  # LOW active le moteur
+# ========================================
+# OUTPUTS POUR LED DES BOUTONS
+# ========================================
+  - platform: gpio
+    pin: GPIO25
+    id: led_verte_output
+    
+  - platform: gpio
+    pin: GPIO27
+    id: led_bleue_output
+    
+  - platform: gpio
+    pin: GPIO33
+    id: led_rouge_output
 
-# Interrupteur pour activer/désactiver le moteur
+
 switch:
+# Interrupteur pour activer/désactiver le moteur
   - platform: output
     name: "Enable Moteur Tiroir"
     id: motor_enable_switch
     output: stepper_enable
     restore_mode: RESTORE_DEFAULT_OFF
     icon: "mdi:power"
+# ========================================
+# SWITCH ON/OFF INDIVIDUEL POUR CHAQUE LED
+# ========================================
+  # Switch LED Verte (contrôle manuel permanent)
+  - platform: output
+    name: "LED Verte"
+    id: led_verte_switch
+    output: led_verte_output
+    icon: "mdi:led-on"
+    restore_mode: RESTORE_DEFAULT_OFF
+  
+  # Switch LED Bleue (contrôle manuel permanent)
+  - platform: output
+    name: "LED Bleue"
+    id: led_bleue_switch
+    output: led_bleue_output
+    icon: "mdi:led-on"
+    restore_mode: RESTORE_DEFAULT_OFF
+  
+  # Switch LED Rouge (contrôle manuel permanent)
+  - platform: output
+    name: "LED Rouge"
+    id: led_rouge_switch
+    output: led_rouge_output
+    icon: "mdi:led-on"
+    restore_mode: RESTORE_DEFAULT_OFF
+  
+  # Switch pour activer/désactiver le feedback automatique
+  - platform: template
+    name: "Feedback LED Boutons"
+    id: led_feedback_enabled
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    icon: "mdi:lightbulb-auto"
 
 # Cover entity pour Home Assistant
 cover:
