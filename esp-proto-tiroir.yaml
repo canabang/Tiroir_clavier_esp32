@@ -130,8 +130,8 @@ binary_sensor:
 stepper:
   - platform: a4988
     id: drawer_stepper
-    step_pin: GPIO14
-    dir_pin: GPIO12
+    step_pin: GPIO12
+    dir_pin: GPIO14
     max_speed: 800 steps/s  # Vitesse max (à ajuster selon tests)
     acceleration: 400 steps/s^2  # Accélération douce
     deceleration: 400 steps/s^2  # Décélération douce
