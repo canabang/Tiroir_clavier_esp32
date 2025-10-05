@@ -205,7 +205,7 @@ switch:
 cover:
   - platform: template
     name: "Tiroir Motorisé"
-    id: drawer_cover
+    id: tiroir_clavier
     device_class: curtain
     
     # Position actuelle (0% = fermé, 100% = ouvert)
@@ -293,7 +293,7 @@ interval:
       - lambda: |-
           if (id(motor_current).state > 1.5) {
             ESP_LOGW("safety", "Surintensité détectée: %.2fA - Arrêt d'urgence!", id(motor_current).state);
-            id(drawer_cover).stop();
+            id(tiroir_clavier).stop();
           }
 
 # Boutons de test dans l'interface
