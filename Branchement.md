@@ -97,8 +97,8 @@ Alim 24V 3A
 #### **Contrôle moteur TMC2209**
 | Pin ESP32 | Pin TMC2209 | Fonction |
 |-----------|-------------|----------|
-| **GPIO 14** | `STEP` | Signal de pas |
-| **GPIO 12** | `DIR` | Direction (avant/arrière) |
+| **GPIO 12** | `STEP` | Signal de pas |
+| **GPIO 14** | `DIR` | Direction (avant/arrière) |
 | **GPIO 13** | `EN` | Enable moteur (LOW=actif) |
 
 #### **Communication I2C (INA219)**
@@ -142,8 +142,8 @@ Alim 24V 3A
 #### **Signaux de contrôle**
 | Pin TMC2209 | Connexion | Fonction |
 |-------------|-----------|----------|
-| **STEP** | ← ESP32 `GPIO 14` | Signal de pas |
-| **DIR** | ← ESP32 `GPIO 12` | Direction |
+| **STEP** | ← ESP32 `GPIO 12` | Signal de pas |
+| **DIR** | ← ESP32 `GPIO 14` | Direction |
 | **EN** | ← ESP32 `GPIO 13` | Enable (LOW=actif) |
 
 #### **Connexion moteur**
